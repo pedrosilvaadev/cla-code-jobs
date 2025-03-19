@@ -1,11 +1,12 @@
 import { JobBoard } from "@/components/job-board";
-import { getJobs } from "@/lib/db-connection";
+import { getJobs } from "./actions";
 
 export default async function Home() {
-  const jobs = await getJobs();
+  const { data } = await getJobs();
+
   return (
     <main className="container mx-auto py-8 px-4">
-      <JobBoard initialJobs={jobs} />
+      <JobBoard initialJobs={data || []} />
     </main>
   );
 }

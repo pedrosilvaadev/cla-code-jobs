@@ -1,13 +1,13 @@
 "use client";
 
 import { SearchBar } from "@/components/search-bar";
-import type { Job } from "@/lib/types";
 import { useMobile } from "@/hooks/use-mobile";
 import { useJobs } from "@/hooks/use-jobs";
 import { Filter } from "./filter";
 import { JobList } from "./job.list";
+import Loading from "./loading";
 
-export function JobBoard({ initialJobs }: { initialJobs: Job[] }) {
+export function JobBoard() {
   const isMobile = useMobile();
   const {
     filterProps,
@@ -16,7 +16,8 @@ export function JobBoard({ initialJobs }: { initialJobs: Job[] }) {
     filteredJobs,
     jobs,
     handleClearFilters,
-  } = useJobs({ initialJobs });
+    loading,
+  } = useJobs();
 
   return (
     <div className="flex flex-col md:flex-row gap-6">
@@ -29,6 +30,8 @@ export function JobBoard({ initialJobs }: { initialJobs: Job[] }) {
           handleClearFilters={handleClearFilters}
         />
       </div>
+
+      {loading && <Loading />}
     </div>
   );
 }

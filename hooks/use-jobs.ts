@@ -1,9 +1,10 @@
 import { Job } from "@/lib/types";
 import { useEffect, useState } from "react";
 
-export const useJobs = ({ initialJobs }: { initialJobs: Job[] }) => {
-  const [jobs, setJobs] = useState<Job[]>(initialJobs);
-  const [filteredJobs, setFilteredJobs] = useState<Job[]>(initialJobs);
+export const useJobs = () => {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [areas, setAreas] = useState<string[]>([]);
   const [companies, setCompanies] = useState<string[]>([]);
   const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
@@ -11,8 +12,27 @@ export const useJobs = ({ initialJobs }: { initialJobs: Job[] }) => {
   const [dateFilter, setDateFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  async function loadJobs() {
+    try {
+      setLoading(true);
+      const result = await fetch("/api/jobs").then((res) => res.json());
+      if (result.success) {
+        setJobs(result.data || []);
+      } else {
+        setJobs([]);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
-    // Extract unique areas and companies
+    loadJobs();
+  }, []);
+
+  useEffect(() => {
     const uniqueAreas = Array.from(new Set(jobs.map((job) => job.area)));
     const uniqueCompanies = Array.from(new Set(jobs.map((job) => job.company)));
 
@@ -23,17 +43,14 @@ export const useJobs = ({ initialJobs }: { initialJobs: Job[] }) => {
   useEffect(() => {
     let result = [...jobs];
 
-    // Filter by area
     if (selectedAreas.length > 0) {
       result = result.filter((job) => selectedAreas.includes(job.area));
     }
 
-    // Filter by company
     if (selectedCompanies.length > 0) {
       result = result.filter((job) => selectedCompanies.includes(job.company));
     }
 
-    // Filter by date
     if (dateFilter !== "all") {
       const now = new Date();
       const daysAgo = dateFilter === "last7" ? 7 : 30;
@@ -42,7 +59,6 @@ export const useJobs = ({ initialJobs }: { initialJobs: Job[] }) => {
       result = result.filter((job) => new Date(job.date) >= cutoffDate);
     }
 
-    // Filter by search query
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
@@ -80,5 +96,6 @@ export const useJobs = ({ initialJobs }: { initialJobs: Job[] }) => {
     filteredJobs,
     jobs,
     handleClearFilters,
+    loading,
   };
 };

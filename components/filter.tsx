@@ -1,9 +1,8 @@
-import { Sheet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FilterSidebar } from "./filter-sidebar";
-import { SheetTrigger, SheetContent } from "./ui/sheet";
 import { FilterSidebarProps } from "@/lib/types";
 import { FilterIcon } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export const Filter = ({
   isMobile,

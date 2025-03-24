@@ -19,28 +19,36 @@ export function JobCard({ job }: { job: Job }) {
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-6">
-        <div className="flex justify-between items-start">
+        <div className="justify-between items-start flex flex-col md:flex-row gap-4">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="items-center gap-2 flex">
               <h3 className="text-xl font-semibold uppercase">{job.title}</h3>
               {isNew && <Badge className="bg-green-500">New</Badge>}
             </div>
-            <div className="flex items-center text-muted-foreground mt-2">
-              <Building className="h-4 w-4 mr-1" />
-              <span className="mr-4 uppercase">{job.company}</span>
-              <Briefcase className="h-4 w-4 mr-1" />
-              <span className="mr-4 uppercase">{job.area}</span>
-              <Crown className="h-4 w-4 mr-1" />
-              <span className="mr-4 uppercase">{job.seniority}</span>
+            <div className="flex md:items-center text-muted-foreground mt-2 flex-col md:flex-row gap-4">
+              <div className="flex gap-1 items-center">
+                <Building className="h-4 w-4 mr-1" />
+                <span className="uppercase">{job.company}</span>
+              </div>
+
+              <div className="flex gap-1 items-center">
+                <Briefcase className="h-4 w-4 mr-1" />
+                <span className="uppercase">{job.area}</span>
+              </div>
+              <div className="flex gap-1 items-center">
+                <Crown className="h-4 w-4 mr-1" />
+                <span className="uppercase">{job.seniority}</span>
+              </div>
+
               {job.workMod && (
-                <>
+                <div className="flex gap-1 items-center">
                   <MapPinIcon className="h-4 w-4 mr-1" />
                   <span className="uppercase">{job.workMod}</span>
-                </>
+                </div>
               )}
             </div>
           </div>
-          <div className="flex items-center text-sm text-muted-foreground">
+          <div className="flex items-center text-sm text-muted-foreground w-32">
             <Calendar className="h-4 w-4 mr-1" />
             <time dateTime={job.date}>
               {formatDistanceToNow(new Date(job.date), { addSuffix: true })}

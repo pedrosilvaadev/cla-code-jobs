@@ -64,8 +64,6 @@ export function FilterSidebar({
     setDateFilter("all");
   };
 
-  console.log(workMods);
-
   return (
     <div className="space-y-6">
       <div>
@@ -129,7 +127,7 @@ export function FilterSidebar({
       <Separator />
 
       <div>
-        <h3 className="font-medium mb-3">Word Mods</h3>
+        <h3 className="font-medium mb-3">Work Modes</h3>
         <div className="space-y-2 max-h-60 overflow-y-auto">
           {workMods.map((workMod) => (
             <div key={workMod} className="flex items-center space-x-2">

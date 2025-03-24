@@ -1,20 +1,23 @@
-"use client"
+"use client";
 
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Separator } from "@/components/ui/separator"
-import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 interface FilterSidebarProps {
-  areas: string[]
-  companies: string[]
-  selectedAreas: string[]
-  selectedCompanies: string[]
-  dateFilter: string
-  setSelectedAreas: (areas: string[]) => void
-  setSelectedCompanies: (companies: string[]) => void
-  setDateFilter: (filter: string) => void
+  areas: string[];
+  companies: string[];
+  workMods: string[];
+  selectedAreas: string[];
+  selectedCompanies: string[];
+  selectedWorkMods: string[];
+  dateFilter: string;
+  setSelectedAreas: (areas: string[]) => void;
+  setSelectedCompanies: (companies: string[]) => void;
+  setSelectedWorkMods: (workMods: string[]) => void;
+  setDateFilter: (filter: string) => void;
 }
 
 export function FilterSidebar({
@@ -26,28 +29,42 @@ export function FilterSidebar({
   setSelectedAreas,
   setSelectedCompanies,
   setDateFilter,
+  workMods,
+  selectedWorkMods,
+  setSelectedWorkMods,
 }: FilterSidebarProps) {
   const handleAreaChange = (area: string, checked: boolean) => {
     if (checked) {
-      setSelectedAreas([...selectedAreas, area])
+      setSelectedAreas([...selectedAreas, area]);
     } else {
-      setSelectedAreas(selectedAreas.filter((a) => a !== area))
+      setSelectedAreas(selectedAreas.filter((a) => a !== area));
     }
-  }
+  };
 
   const handleCompanyChange = (company: string, checked: boolean) => {
     if (checked) {
-      setSelectedCompanies([...selectedCompanies, company])
+      setSelectedCompanies([...selectedCompanies, company]);
     } else {
-      setSelectedCompanies(selectedCompanies.filter((c) => c !== company))
+      setSelectedCompanies(selectedCompanies.filter((c) => c !== company));
     }
-  }
+  };
+
+  const handleWordModsChange = (wordMod: string, checked: boolean) => {
+    if (checked) {
+      setSelectedWorkMods([...selectedWorkMods, wordMod]);
+    } else {
+      setSelectedWorkMods(selectedWorkMods.filter((c) => c !== wordMod));
+    }
+  };
 
   const clearFilters = () => {
-    setSelectedAreas([])
-    setSelectedCompanies([])
-    setDateFilter("all")
-  }
+    setSelectedAreas([]);
+    setSelectedCompanies([]);
+    setSelectedWorkMods([]);
+    setDateFilter("all");
+  };
+
+  console.log(workMods);
 
   return (
     <div className="space-y-6">
@@ -79,7 +96,9 @@ export function FilterSidebar({
               <Checkbox
                 id={`area-${area}`}
                 checked={selectedAreas.includes(area)}
-                onCheckedChange={(checked) => handleAreaChange(area, checked as boolean)}
+                onCheckedChange={(checked) =>
+                  handleAreaChange(area, checked as boolean)
+                }
               />
               <Label htmlFor={`area-${area}`}>{area}</Label>
             </div>
@@ -97,9 +116,31 @@ export function FilterSidebar({
               <Checkbox
                 id={`company-${company}`}
                 checked={selectedCompanies.includes(company)}
-                onCheckedChange={(checked) => handleCompanyChange(company, checked as boolean)}
+                onCheckedChange={(checked) =>
+                  handleCompanyChange(company, checked as boolean)
+                }
               />
               <Label htmlFor={`company-${company}`}>{company}</Label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      <div>
+        <h3 className="font-medium mb-3">Word Mods</h3>
+        <div className="space-y-2 max-h-60 overflow-y-auto">
+          {workMods.map((workMod) => (
+            <div key={workMod} className="flex items-center space-x-2">
+              <Checkbox
+                id={`workMod-${workMod}`}
+                checked={selectedWorkMods.includes(workMod)}
+                onCheckedChange={(checked) =>
+                  handleWordModsChange(workMod, checked as boolean)
+                }
+              />
+              <Label htmlFor={`workMod-${workMod}`}>{workMod}</Label>
             </div>
           ))}
         </div>
@@ -109,11 +150,14 @@ export function FilterSidebar({
         variant="outline"
         className="w-full"
         onClick={clearFilters}
-        disabled={selectedAreas.length === 0 && selectedCompanies.length === 0 && dateFilter === "all"}
+        disabled={
+          selectedAreas.length === 0 &&
+          selectedCompanies.length === 0 &&
+          dateFilter === "all"
+        }
       >
         Clear Filters
       </Button>
     </div>
-  )
+  );
 }
-

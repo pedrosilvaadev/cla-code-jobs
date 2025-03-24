@@ -7,8 +7,10 @@ export const useJobs = () => {
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [areas, setAreas] = useState<string[]>([]);
   const [companies, setCompanies] = useState<string[]>([]);
+  const [workMods, setWorkMods] = useState<string[]>([]);
   const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>([]);
+  const [selectedWorkMods, setSelectedWorkMods] = useState<string[]>([]);
   const [dateFilter, setDateFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -33,11 +35,25 @@ export const useJobs = () => {
   }, []);
 
   useEffect(() => {
-    const uniqueAreas = Array.from(new Set(jobs.map((job) => job.area)));
-    const uniqueCompanies = Array.from(new Set(jobs.map((job) => job.company)));
+    const uniqueValues: {
+      areas: Set<string>;
+      companies: Set<string>;
+      wordMods: Set<string>;
+    } = {
+      areas: new Set(),
+      companies: new Set(),
+      wordMods: new Set(),
+    };
 
-    setAreas(uniqueAreas);
-    setCompanies(uniqueCompanies);
+    jobs.forEach((job) => {
+      if (job.area) uniqueValues.areas.add(job.area);
+      if (job.company) uniqueValues.companies.add(job.company);
+      if (job.workMod) uniqueValues.wordMods.add(job.workMod);
+    });
+
+    setAreas([...uniqueValues.areas]);
+    setCompanies([...uniqueValues.companies]);
+    setWorkMods([...uniqueValues.wordMods]);
   }, [jobs]);
 
   useEffect(() => {
@@ -49,6 +65,10 @@ export const useJobs = () => {
 
     if (selectedCompanies.length > 0) {
       result = result.filter((job) => selectedCompanies.includes(job.company));
+    }
+
+    if (selectedWorkMods.length > 0) {
+      result = result.filter((job) => selectedWorkMods.includes(job.workMod));
     }
 
     if (dateFilter !== "all") {
@@ -80,12 +100,16 @@ export const useJobs = () => {
     dateFilter,
     setSelectedAreas,
     setSelectedCompanies,
+    setSelectedWorkMods,
     setDateFilter,
+    workMods,
+    selectedWorkMods,
   };
 
   const handleClearFilters = () => {
     setSelectedAreas([]);
     setSelectedCompanies([]);
+    setSelectedWorkMods([]);
     setDateFilter("all");
     setSearchQuery("");
   };

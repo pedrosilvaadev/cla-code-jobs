@@ -5,6 +5,7 @@ import {
   Calendar,
   Briefcase,
   Crown,
+  MapPinIcon,
 } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +31,13 @@ export function JobCard({ job }: { job: Job }) {
               <Briefcase className="h-4 w-4 mr-1" />
               <span className="mr-4 uppercase">{job.area}</span>
               <Crown className="h-4 w-4 mr-1" />
-              <span className="uppercase">{job.seniority}</span>
+              <span className="mr-4 uppercase">{job.seniority}</span>
+              {job.workMod && (
+                <>
+                  <MapPinIcon className="h-4 w-4 mr-1" />
+                  <span className="uppercase">{job.workMod}</span>
+                </>
+              )}
             </div>
           </div>
           <div className="flex items-center text-sm text-muted-foreground">
